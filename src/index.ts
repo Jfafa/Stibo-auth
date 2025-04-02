@@ -14,9 +14,11 @@ const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb:auth-api';
 
 
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+if (process.env.NODE_ENV !== 'test') {
+  mongoose.connect(MONGODB_URI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err));
+}
 
 
 app.use(express.json());
@@ -41,8 +43,11 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 export default app; 
